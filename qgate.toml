@@ -1,0 +1,18 @@
+# q-gate configuration
+
+[analysis]
+# Languages to analyze
+targets = ["java", "kotlin"]
+
+# Analysis scope defaults
+# "diff" or "full"
+scope = "diff"
+
+[rules.god_class]
+max_methods = 20
+max_loc = 500
+
+[rules.layers]
+ui = ["domain"]
+domain = []
+data = ["domain"]

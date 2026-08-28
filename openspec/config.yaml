@@ -1,0 +1,12 @@
+schema: house-style
+
+context: |
+  Tech stack: Rust, Tree-sitter
+  Target Languages: Java, Kotlin
+  Project: q-gate (Architecture Enforcement CLI)
+  Conventions:
+    - Rust 2024 edition
+    - Error handling with anyhow
+    - Parsing with tree-sitter
+    - Configuration in qgate.toml
+    - JSON output for agents
