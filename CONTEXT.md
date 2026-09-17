@@ -12,6 +12,7 @@ A standard domain of software quality verification enforced by q-gate:
 - **Build**: Compilation and build asset verification (e.g., `cargo check`, `vite build`).
 - **DeadCode**: Detection of unused functions, modules, or exports (e.g., `cargo-deadlinks`, `knip`).
 - **Duplication**: Code repetition and clone detection (e.g., `jscpd`).
+- **R8**: Android R8/ProGuard stability and keep-rule optimization validation (e.g., `scripts/r8_firewall.py`).
 
 ### Tool Provider
 An external command, tool, or script discovered in the codebase or declared in `qgate.toml` that executes verification for a specific Quality Aspect. q-gate delegates execution to external Tool Providers when available, falling back to native AST rules (e.g. for DeadCode and Duplication) or issuing Advisories when external tools are absent.

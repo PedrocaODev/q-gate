@@ -1,5 +1,6 @@
 use super::{Rule, Violation};
 use std::collections::HashMap;
+use streaming_iterator::StreamingIterator;
 use tree_sitter::{Query, QueryCursor, Tree};
 
 pub struct LayerRule {
@@ -45,16 +46,16 @@ impl Rule for LayerRule {
         };
 
         let language = if file_path.ends_with(".java") {
-            tree_sitter_java::language()
+            tree_sitter_java::LANGUAGE.into()
         } else {
-            tree_sitter_kotlin::language()
+            tree_sitter_kotlin::LANGUAGE.into()
         };
 
-        let query = Query::new(language, query_str).unwrap();
+        let query = Query::new(&language, query_str).unwrap();
         let mut cursor = QueryCursor::new();
-        let matches = cursor.matches(&query, tree.root_node(), code.as_bytes());
+        let mut matches = cursor.matches(&query, tree.root_node(), code.as_bytes());
 
-        for mat in matches {
+        while let Some(mat) = matches.next() {
             let import_node = mat.nodes_for_capture_index(0).next().unwrap();
             let import_str = &code[import_node.byte_range()];
 

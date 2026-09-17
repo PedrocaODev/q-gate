@@ -1,7 +1,7 @@
 # ADR 0003: External Tool Provider Orchestration for Quality Aspects
 
 ## Context
-`q-gate` must enforce that software codebases adhere to essential quality standards across eight key aspects: `Style`, `Lint`, `TypeCheck`, `UnitTest`, `IntegrationTest`, `Build`, `DeadCode`, and `Duplication`. Building custom linters, compilers, and test runners into `q-gate` for every ecosystem is unmaintainable, duplicates existing mature tools, and risks lagging behind language standards.
+`q-gate` must enforce that software codebases adhere to essential quality standards across nine key aspects: `Style`, `Lint`, `TypeCheck`, `UnitTest`, `IntegrationTest`, `Build`, `DeadCode`, `Duplication`, and `R8`. Building custom linters, compilers, and test runners into `q-gate` for every ecosystem is unmaintainable, duplicates existing mature tools, and risks lagging behind language standards.
 
 ## Decision
 We will design `q-gate` as an **Orchestrator** of external **Tool Providers** rather than a standalone linter:

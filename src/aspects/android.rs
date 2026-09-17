@@ -456,7 +456,7 @@ mod tests {
                 .and_then(|c| c.command.as_deref()),
             Some("./gradlew ktlintCheck")
         );
-        assert!(detected.get(&QualityAspect::TypeCheck).is_none());
+        assert!(!detected.contains_key(&QualityAspect::TypeCheck));
     }
 
     #[test]
@@ -476,7 +476,7 @@ mod tests {
 
         let detected = detect_android_aspects(dir.path());
 
-        assert!(detected.get(&QualityAspect::TypeCheck).is_none());
+        assert!(!detected.contains_key(&QualityAspect::TypeCheck));
     }
 
     #[test]
@@ -512,7 +512,7 @@ mod tests {
 
         let detected = detect_android_aspects(dir.path());
 
-        assert!(detected.get(&QualityAspect::Build).is_none());
+        assert!(!detected.contains_key(&QualityAspect::Build));
         assert_eq!(
             detected
                 .get(&QualityAspect::Style)

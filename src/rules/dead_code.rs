@@ -149,8 +149,7 @@ fn collect_nodes(
     } else if kind == "class_parameter" {
         if is_private(node, code)
             && !has_annotation(node)
-            && (direct_child_kind(node, "val").is_some()
-                || direct_child_kind(node, "var").is_some())
+            && is_class_property_parameter(node, code)
             && let Some(name) = direct_child_kind(node, "simple_identifier")
         {
             add_declaration(node, name, code, "member", declarations);
@@ -706,6 +705,13 @@ fn direct_child_kind<'a>(node: Node<'a>, kind: &str) -> Option<Node<'a>> {
     let mut cursor = node.walk();
     node.children(&mut cursor)
         .find(|child| child.kind() == kind)
+}
+
+fn is_class_property_parameter(node: Node<'_>, code: &str) -> bool {
+    direct_child_kind(node, "val").is_some()
+        || direct_child_kind(node, "var").is_some()
+        || direct_child_kind(node, "binding_pattern_kind")
+            .is_some_and(|kind| matches!(&code[kind.byte_range()], "val" | "var"))
 }
 
 fn first_descendant_kind<'a>(node: Node<'a>, kind: &str) -> Option<Node<'a>> {

@@ -173,7 +173,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn all_aspects() -> [QualityAspect; 8] {
+fn all_aspects() -> [QualityAspect; 9] {
     [
         QualityAspect::Style,
         QualityAspect::Lint,
@@ -183,6 +183,7 @@ fn all_aspects() -> [QualityAspect; 8] {
         QualityAspect::Build,
         QualityAspect::DeadCode,
         QualityAspect::Duplication,
+        QualityAspect::R8,
     ]
 }
 

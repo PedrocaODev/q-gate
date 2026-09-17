@@ -15,6 +15,8 @@ pub enum QualityAspect {
     Build,
     DeadCode,
     Duplication,
+    #[serde(rename = "r8")]
+    R8,
 }
 
 impl fmt::Display for QualityAspect {
@@ -28,6 +30,7 @@ impl fmt::Display for QualityAspect {
             QualityAspect::Build => write!(f, "build"),
             QualityAspect::DeadCode => write!(f, "dead_code"),
             QualityAspect::Duplication => write!(f, "duplication"),
+            QualityAspect::R8 => write!(f, "r8"),
         }
     }
 }
@@ -301,10 +304,16 @@ mod tests {
             [aspects.build]
             [aspects.dead_code]
             [aspects.duplication]
+
+            [aspects.r8]
+            command = "python3 ../../scripts/r8_firewall.py"
+            stage = "pre-push"
+            severity = "error"
+            enabled = true
         "#;
 
         let config: Config = toml::from_str(toml_str).unwrap();
-        assert_eq!(config.aspects.len(), 8);
+        assert_eq!(config.aspects.len(), 9);
         assert!(config.aspects.contains_key(&QualityAspect::Style));
         assert!(config.aspects.contains_key(&QualityAspect::Lint));
         assert!(config.aspects.contains_key(&QualityAspect::TypeCheck));
@@ -313,6 +322,14 @@ mod tests {
         assert!(config.aspects.contains_key(&QualityAspect::Build));
         assert!(config.aspects.contains_key(&QualityAspect::DeadCode));
         assert!(config.aspects.contains_key(&QualityAspect::Duplication));
+        let r8 = &config.aspects[&QualityAspect::R8];
+        assert_eq!(
+            r8.command.as_deref(),
+            Some("python3 ../../scripts/r8_firewall.py")
+        );
+        assert_eq!(r8.stage, Some(Stage::PrePush));
+        assert_eq!(r8.severity, Some(Severity::Error));
+        assert_eq!(r8.enabled, Some(true));
 
         let style = &config.aspects[&QualityAspect::Style];
         assert_eq!(style.stage, Some(Stage::PreCommit));
@@ -329,5 +346,6 @@ mod tests {
         assert_eq!(QualityAspect::Build.to_string(), "build");
         assert_eq!(QualityAspect::DeadCode.to_string(), "dead_code");
         assert_eq!(QualityAspect::Duplication.to_string(), "duplication");
+        assert_eq!(QualityAspect::R8.to_string(), "r8");
     }
 }

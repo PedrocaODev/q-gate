@@ -9,7 +9,7 @@ pub struct JavaAnalyzer {
 impl JavaAnalyzer {
     pub fn new() -> Self {
         Self {
-            language: tree_sitter_java::language(),
+            language: tree_sitter_java::LANGUAGE.into(),
         }
     }
 }
@@ -18,7 +18,7 @@ impl LanguageAnalyzer for JavaAnalyzer {
     fn analyze(&self, code: &str) -> Result<Tree> {
         let mut parser = Parser::new();
         parser
-            .set_language(self.language)
+            .set_language(&self.language)
             .context("Error loading Java grammar")?;
         parser
             .parse(code, None)

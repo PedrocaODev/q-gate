@@ -16,3 +16,9 @@ max_loc = 500
 ui = ["domain"]
 domain = []
 data = ["domain"]
+
+[aspects.r8]
+command = "python3 ../../scripts/r8_firewall.py"
+stage = "pre-push"
+enabled = true
+severity = "error"

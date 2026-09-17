@@ -1,5 +1,6 @@
 use super::{Rule, Violation};
 use crate::config::GodClassConfig;
+use streaming_iterator::StreamingIterator;
 use tree_sitter::{Query, QueryCursor, Tree};
 
 pub struct GodClassRule {
@@ -13,14 +14,14 @@ impl GodClassRule {
 
     fn check_java(&self, file_path: &str, code: &str, tree: &Tree) -> Vec<Violation> {
         let mut violations = Vec::new();
-        let language = tree_sitter_java::language();
+        let language: tree_sitter::Language = tree_sitter_java::LANGUAGE.into();
 
         let class_query_str = "(class_declaration name: (identifier) @name) @class";
-        let class_query = Query::new(language, class_query_str).unwrap();
+        let class_query = Query::new(&language, class_query_str).unwrap();
         let mut class_cursor = QueryCursor::new();
-        let matches = class_cursor.matches(&class_query, tree.root_node(), code.as_bytes());
+        let mut matches = class_cursor.matches(&class_query, tree.root_node(), code.as_bytes());
 
-        for mat in matches {
+        while let Some(mat) = matches.next() {
             let class_node = mat.nodes_for_capture_index(1).next().unwrap();
             let class_name_node = mat.nodes_for_capture_index(0).next().unwrap();
             let class_name = &code[class_name_node.byte_range()];
@@ -72,15 +73,15 @@ impl GodClassRule {
 
     fn check_kotlin(&self, file_path: &str, code: &str, tree: &Tree) -> Vec<Violation> {
         let mut violations = Vec::new();
-        let language = tree_sitter_kotlin::language();
+        let language: tree_sitter::Language = tree_sitter_kotlin::LANGUAGE.into();
 
         // Kotlin class declaration name is often a type_identifier
         let class_query_str = "(class_declaration ((type_identifier) @name)) @class";
-        let class_query = Query::new(language, class_query_str).unwrap();
+        let class_query = Query::new(&language, class_query_str).unwrap();
         let mut class_cursor = QueryCursor::new();
-        let matches = class_cursor.matches(&class_query, tree.root_node(), code.as_bytes());
+        let mut matches = class_cursor.matches(&class_query, tree.root_node(), code.as_bytes());
 
-        for mat in matches {
+        while let Some(mat) = matches.next() {
             let class_node = mat.nodes_for_capture_index(1).next().unwrap();
             let class_name_node = mat.nodes_for_capture_index(0).next().unwrap();
             let class_name = &code[class_name_node.byte_range()];

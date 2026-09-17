@@ -59,9 +59,11 @@ fn advisories_only_audit_prints_advisories_and_passes() {
 }
 
 #[test]
-fn failed_configured_aspect_prints_violations_and_fails() {
+fn failed_configured_r8_aspect_prints_violations_and_fails() {
     let dir = TempDir::new("violation");
-    dir.write_config("\n[aspects.lint]\ncommand = \"exit 1\"\nenabled = true\n");
+    dir.write_config(
+        "\n[aspects.r8]\ncommand = \"exit 1\"\nstage = \"pre-push\"\nenabled = true\n",
+    );
 
     let output = dir.run(&["--scope", "full"]);
     let stdout = String::from_utf8_lossy(&output.stdout);
