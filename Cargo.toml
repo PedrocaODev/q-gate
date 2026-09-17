@@ -2,6 +2,8 @@
 name = "q-gate"
 version = "0.1.0"
 edition = "2024"
+license = "MIT"
+description = "A CLI tool for code quality gates and architectural boundaries enforcement in Java and Kotlin codebases"
 
 [dependencies]
 tree-sitter = "0.24"
